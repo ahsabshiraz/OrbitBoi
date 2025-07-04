@@ -14,7 +14,7 @@ export default function CreatorScene({ experience }) {
     env,
     backgroundColor,
   } = useCreatorStore();
-
+//  console.log('CurrentExperience', experience)
   return (
     <Canvas
       shadows

@@ -3,6 +3,7 @@ import { useThree} from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { useEffect } from 'react';
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
+
 function CameraSetup() {
     const {
         cameraPosition,
@@ -17,7 +18,7 @@ function CameraSetup() {
 
     useEffect(() => {
         camera.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-        camera.lookAt(lookAtPosition.x, lookAtPosition.y, lookAtPosition.z);
+        camera.lookAt(new Vector3(lookAtPosition.x, lookAtPosition.y, lookAtPosition.z));
         camera.updateProjectionMatrix();
     }, [camera, cameraPosition, lookAtPosition]);
 

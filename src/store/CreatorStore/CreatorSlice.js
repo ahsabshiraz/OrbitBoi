@@ -11,7 +11,156 @@ const CreatorSlice = (set, get) => ({
     selectedModelId: null,
     modelPositions: {}, // { modelId: { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, rotationZ: 0, scale: 1 } }
     
+    // Save functionality
+    saving: false,
+    lastSaved: null,
+    
     setSelectedModelId: (modelId) => set({ selectedModelId: modelId }),
+    
+    // Save scene data to backend
+    saveSceneData: async (experienceId) => {
+        const state = get();
+        set({ saving: true });
+        
+        try {
+            const token = localStorage.getItem('token');
+            const sceneData = {
+                // Camera settings
+                camera: {
+                    position: state.cameraPosition,
+                    lookAt: state.lookAtPosition,
+                    controls: {
+                        enabledDamping: state.enabledDamping,
+                        enabledPan: state.enabledPan,
+                        enabledRotate: state.enabledRotate,
+                        enabledZoom: state.enabledZoom
+                    }
+                },
+                
+                // Environment settings
+                environment: {
+                    exposure: state.exposure,
+                    env: state.env,
+                    backgroundColor: state.backgroundColor
+                },
+                
+                // Fog settings
+                fog: {
+                    enabled: state.fogEnabled,
+                    min: state.fogMin,
+                    max: state.fogMax
+                },
+                
+                // Model positions
+                modelPositions: state.modelPositions
+            };
+            
+            const response = await fetch(`http://localhost:5000/api/experiences/${experienceId}/scene`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(sceneData)
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to save scene data');
+            }
+            
+            const result = await response.json();
+            set({ 
+                saving: false, 
+                lastSaved: new Date().toISOString() 
+            });
+            
+            return result;
+        } catch (error) {
+            set({ saving: false });
+            throw error;
+        }
+    },
+    
+    // Load scene data from backend
+    loadSceneData: async (experienceId) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:5000/api/experiences/${experienceId}/scene`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (!response.ok) {
+                console.log('No saved scene data found, using defaults');
+                return;
+            }
+            
+            const sceneData = await response.json();
+            
+            // Ensure all values have proper defaults to prevent undefined
+            const safeSceneData = {
+                camera: {
+                    position: {
+                        x: sceneData.camera?.position?.x ?? 0,
+                        y: sceneData.camera?.position?.y ?? 1,
+                        z: sceneData.camera?.position?.z ?? 10
+                    },
+                    lookAt: {
+                        x: sceneData.camera?.lookAt?.x ?? 0,
+                        y: sceneData.camera?.lookAt?.y ?? 0,
+                        z: sceneData.camera?.lookAt?.z ?? 0
+                    },
+                    controls: {
+                        enabledDamping: sceneData.camera?.controls?.enabledDamping ?? true,
+                        enabledPan: sceneData.camera?.controls?.enabledPan ?? true,
+                        enabledRotate: sceneData.camera?.controls?.enabledRotate ?? true,
+                        enabledZoom: sceneData.camera?.controls?.enabledZoom ?? true
+                    }
+                },
+                environment: {
+                    exposure: sceneData.environment?.exposure ?? 1,
+                    env: sceneData.environment?.env ?? false,
+                    backgroundColor: sceneData.environment?.backgroundColor ?? '#ffffff'
+                },
+                fog: {
+                    enabled: sceneData.fog?.enabled ?? false,
+                    min: sceneData.fog?.min ?? 10,
+                    max: sceneData.fog?.max ?? 100
+                },
+                modelPositions: sceneData.modelPositions || {}
+            };
+            
+            // Update store with safe data
+            set({
+                // Camera settings
+                cameraPosition: safeSceneData.camera.position,
+                lookAtPosition: safeSceneData.camera.lookAt,
+                enabledDamping: safeSceneData.camera.controls.enabledDamping,
+                enabledPan: safeSceneData.camera.controls.enabledPan,
+                enabledRotate: safeSceneData.camera.controls.enabledRotate,
+                enabledZoom: safeSceneData.camera.controls.enabledZoom,
+                
+                // Environment settings
+                exposure: safeSceneData.environment.exposure,
+                env: safeSceneData.environment.env,
+                backgroundColor: safeSceneData.environment.backgroundColor,
+                
+                // Fog settings
+                fogEnabled: safeSceneData.fog.enabled,
+                fogMin: safeSceneData.fog.min,
+                fogMax: safeSceneData.fog.max,
+                
+                // Model positions
+                modelPositions: safeSceneData.modelPositions
+            });
+            
+            return safeSceneData;
+        } catch (error) {
+            console.error('Failed to load scene data:', error);
+            // Don't update store on error, keep current values
+        }
+    },
     
     // Initialize model position if not exists
     initializeModelPosition: (modelId) => {
