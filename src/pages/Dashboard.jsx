@@ -1,21 +1,34 @@
-import useAuthStore from '../store/AuthStore/useAuthStore';
-import { useNavigate } from 'react-router-dom';
+import Header from '../components/UI components/Header';
+import ModelCard from '../components/UI components/ModelCard';
 
 export default function Dashboard() {
-  const user = useAuthStore((state) => state.user);
-  const logout = useAuthStore((state) => state.logout);
-  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+
+  // Dummy array for layout preview
+  const dummyModels = [
+    { _id: '1', name: 'Modern Chair' },
+    { _id: '2', name: 'Robot Arm' },
+    { _id: '3', name: 'Futuristic Car' },
+  ];
 
   return (
     <div>
-      <h2>Welcome, {user?.name || 'User'}!</h2>
-      <button onClick={handleLogout}>Logout</button>
-      <p>OrbitBoi Dashboard (3D features coming soon!)</p>
+      <Header />
+      <main className="p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">📦 Your 3D Models</h2>
+          <button className="px-4 py-2 bg-blue-600 text-white rounded">
+            Upload Model
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {dummyModels.map((model) => (
+            <ModelCard key={model._id} model={model} />
+          ))}
+        </div>
+      </main>
     </div>
   );
+
 }
