@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber';
-import { Environment, OrbitControls, useGLTF } from '@react-three/drei';
+import { Environment, OrbitControls, useGLTF, TransformControls } from '@react-three/drei';
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 import { Suspense } from 'react';
 import BackGround from './backGround';
@@ -10,7 +10,7 @@ function Model({ url }) {
 }
 
 export default function CreatorScene({ model }) {
-  const { backgroundColor, exposure, fogEnabled, env, fogMin, fogMax } = useCreatorStore();
+  const { backgroundColor, exposure, fogEnabled, env, enabledControl, setEnabledControl } = useCreatorStore();
   return (
     <Canvas
       shadows
@@ -20,11 +20,17 @@ export default function CreatorScene({ model }) {
     >
       <BackGround />
       <Suspense fallback={null}>
-        {model && <Model url={model.cloudinaryUrl} />}
-        {env && <Environment preset="city" background />}
+        <TransformControls
+          onPointerEnter={() => { setEnabledControl(false) }}
+          onPointerLeave={() => { setEnabledControl(true) }}>
+          {model && <Model url={model.cloudinaryUrl} />}
+        </TransformControls>
+          {env && <Environment preset="city" background />}
       </Suspense>
 
-      <OrbitControls />
+      <OrbitControls
+        enableRotate={enabledControl}
+      />
     </Canvas>
   );
 }
