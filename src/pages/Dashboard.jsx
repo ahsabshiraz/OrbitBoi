@@ -1,4 +1,4 @@
-import useAuthStore from '../store/useAuthStore';
+import useAuthStore from '../store/AuthStore/useAuthStore';
 import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {

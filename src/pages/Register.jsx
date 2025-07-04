@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { register } from '../services/authService';
-import useAuthStore from '../store/useAuthStore';
+import useAuthStore from '../store/AuthStore/useAuthStore';
 import { useNavigate, Link } from 'react-router-dom';
 
 export default function Register() {
