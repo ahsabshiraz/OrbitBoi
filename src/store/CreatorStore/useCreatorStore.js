@@ -11,10 +11,15 @@ const useCreatorStore = create((set) => ({
         set({ showUploadModel: flag })
     },
 
-  fetchModels: async () => {
+    fetchModels: async () => {
         set({ loading: true, error: null });
+        const token = localStorage.getItem('token')
         try {
-            const res = await axios.get('http://localhost:5000/api/models');
+            const res = await axios.get('http://localhost:5000/api/models', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             set({ models: res.data, loading: false });
         } catch (err) {
             set({ error: 'Failed to fetch models', loading: false });
@@ -25,10 +30,14 @@ const useCreatorStore = create((set) => ({
         set({ loading: true, error: null });
         const formData = new FormData();
         formData.append('model', file);
+        const token = localStorage.getItem('token')
 
         try {
             const res = await axios.post('http://localhost:5000/api/models/upload', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token}`,
+                },
             });
             set((state) => ({
                 models: [...state.models, res.data],

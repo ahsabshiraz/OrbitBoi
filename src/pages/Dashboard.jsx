@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Upload, Grid, List, Plus, Eye, Download } from 'lucide-react';
 import ModelCard from '../components/UI components/ModelCard'
 import Header from '../components/UI components/Header'
@@ -6,10 +6,13 @@ import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 import UploadModal from './UploadModel';
 
 const Dashboard = () => {
+  const { models, fetchModels, loading, error } = useCreatorStore();
   const showUploadModel = useCreatorStore((state) => state.showUploadModel)
   const setShowUploadModel = useCreatorStore((state) => state.setShowUploadModel)
-  const models = useCreatorStore((state) => state.models);
 
+  useEffect(() => {
+    fetchModels();
+  }, [fetchModels]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
@@ -58,20 +61,19 @@ const Dashboard = () => {
         </div>
 
         {/* Empty State (if no models) */}
-        {models.length === 0 && (
-          <div className="text-center py-16">
-            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Upload className="w-12 h-12 text-gray-400" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">No models yet</h3>
-            <p className="text-gray-500 mb-6">Upload your first 3D model to get started</p>
+        {models.length === 0 && !loading && (
+          <div className="text-center py-16 text-gray-500">
+            No models found. Upload your first 3D model!
           </div>
         )}
+
+        {loading && <div>Loading...</div>}
+        {error && <div className="text-red-500">{error}</div>}
       </main>
 
       {/* Upload Modal */}
       {showUploadModel && (
-        <UploadModal/>
+        <UploadModal />
       )}
     </div>
   );
