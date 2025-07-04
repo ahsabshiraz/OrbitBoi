@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Eye, Edit2, MoreVertical } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ModelCard({ model }) {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
 
   const formattedDate = new Date(model.uploadedAt).toLocaleDateString(); // e.g., "7/4/2025"
   return (
@@ -24,7 +26,10 @@ export default function ModelCard({ model }) {
           <button className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors">
             <Eye className="w-5 h-5 text-white" />
           </button>
-          <button className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors">
+          <button
+            className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors"
+            onClick={() => navigate(`/creator/${model._id}`)}
+          >
             <Edit2 className="w-5 h-5 text-white" />
           </button>
           <button className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors">
