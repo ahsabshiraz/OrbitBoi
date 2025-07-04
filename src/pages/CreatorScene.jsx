@@ -1,16 +1,13 @@
 import { Canvas } from '@react-three/fiber';
-import { Environment, OrbitControls, useGLTF, TransformControls } from '@react-three/drei';
+import { Environment, OrbitControls, TransformControls } from '@react-three/drei';
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 import { Suspense } from 'react';
 import BackGround from './backGround';
+import Model from './Model';
 
-function Model({ url }) {
-  const { scene } = useGLTF(url);
-  return <primitive object={scene} />;
-}
 
 export default function CreatorScene({ model }) {
-  const { backgroundColor, exposure, fogEnabled, env, enabledControl, setEnabledControl } = useCreatorStore();
+  const { exposure, env, enabledControl, setEnabledControl } = useCreatorStore();
   return (
     <Canvas
       shadows
