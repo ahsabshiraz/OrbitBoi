@@ -12,7 +12,7 @@ export default function CreatorScene({ experience }) {
   const { 
     exposure, 
     env,
-    cameraPosition,
+    backgroundColor,
   } = useCreatorStore();
 
   return (
@@ -20,6 +20,7 @@ export default function CreatorScene({ experience }) {
       shadows
       gl={{ toneMappingExposure: exposure }}
       camera={{ position: [0, 1, 10], fov: 50 }}
+      style={{ backgroundColor: backgroundColor }}
     // style={{ height: '100%', width: '100%' }}
     >
       <CameraSetup />
