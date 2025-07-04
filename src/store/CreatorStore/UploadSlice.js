@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { create } from 'zustand';
 
-const UploadSlice = (set) => ({
+const UploadSlice = (set, get) => ({
     models: [],
     loading: false,
     error: null,
@@ -10,11 +11,11 @@ const UploadSlice = (set) => ({
         set({ showUploadModel: flag })
     },
 
-    fetchModels: async () => {
+    fetchExperiences: async () => {
         set({ loading: true, error: null });
         const token = localStorage.getItem('token')
         try {
-            const res = await axios.get('http://localhost:5000/api/models', {
+            const res = await axios.get('http://localhost:5000/api/experiences', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -25,28 +26,43 @@ const UploadSlice = (set) => ({
         }
     },
 
-    uploadModel: async (file, onSuccess) => {
-        set({ loading: true, error: null });
+    uploadModel: async (experienceId, file) => {
+        const token = localStorage.getItem('token');
         const formData = new FormData();
         formData.append('model', file);
-        const token = localStorage.getItem('token')
-
         try {
-            const res = await axios.post('http://localhost:5000/api/models/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            set((state) => ({
-                models: [...state.models, res.data],
-                loading: false,
-                showUploadModel: false
-            }));
-            if (onSuccess) onSuccess();
+            const res = await axios.post(
+                `http://localhost:5000/api/experiences/${experienceId}/models`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
+            return res.data; // The updated experience
         } catch (err) {
-            set({ error: 'Upload failed', loading: false });
-            alert('Upload failed');
+            throw err;
+        }
+    },
+
+    createExperience: async (experienceData) => {
+        const token = localStorage.getItem('token')
+        try {
+            const res = await axios.post(
+                'http://localhost:5000/api/experiences',
+                experienceData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            return res.data; // The new experience
+        } catch (err) {
+            throw err;
         }
     },
 });

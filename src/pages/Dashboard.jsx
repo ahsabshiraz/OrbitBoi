@@ -4,15 +4,30 @@ import ModelCard from '../components/UI components/ModelCard'
 import Header from '../components/UI components/Header'
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 import UploadModal from './UploadModel';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { models, fetchModels, loading, error } = useCreatorStore();
+  const { models, fetchExperiences, loading, error } = useCreatorStore();
   const showUploadModel = useCreatorStore((state) => state.showUploadModel)
   const setShowUploadModel = useCreatorStore((state) => state.setShowUploadModel)
+  const createExperience = useCreatorStore((state) => state.createExperience)
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchModels();
-  }, [fetchModels]);
+    fetchExperiences();
+  }, [fetchExperiences]);
+
+  const handleCreateExperience = async () => {
+    try {
+      const newExperience = await createExperience({
+        name: "New Experience",
+        description: "A new 3D experience"
+      });
+      navigate(`/creator/${newExperience._id}`);
+    } catch (err) {
+      alert('Failed to create experience');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
@@ -28,6 +43,13 @@ const Dashboard = () => {
           </div>
 
           <div className="flex items-center space-x-3">
+            <button
+              onClick={handleCreateExperience}
+              className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+            >
+              <Plus className="w-5 h-5" />
+              <span>Create</span>
+            </button>
             <button
               onClick={() => setShowUploadModel(true)}
               className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"

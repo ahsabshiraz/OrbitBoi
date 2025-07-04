@@ -4,40 +4,44 @@ import axios from "axios";
 import CreatorScene from "./CreatorScene";
 import LeftPanel from "./LeftPanel";
 
-export default function ViewerLayout() {
+export default function Creator() {
   const { id } = useParams();
-  const [model, setModel] = useState(null);
+  const [experience, setExperience] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchModel() {
+    const fetchExperience = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`http://localhost:5000/api/models/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:5000/api/experiences/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         });
-        setModel(res.data);
+        setExperience(response.data);
       } catch (err) {
-        setModel(null);
+        setError('Failed to load experience');
+        console.error('Error fetching experience:', err);
       } finally {
         setLoading(false);
       }
+    };
+
+    if (id) {
+      fetchExperience();
     }
-    fetchModel();
   }, [id]);
 
-  useEffect(() => {
-    console.log("Updated model:", model);
-  }, [model]);
-
-  if (loading) return <div>Loading...</div>;
-  if (!model) return <div>Model not found.</div>;
+  if (loading) return <div>Loading experience...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!experience) return <div>Experience not found</div>;
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <LeftPanel model={model} />
+      <LeftPanel experience={experience} />
       <div className="flex-1">
-        <CreatorScene model={model} />
+        <CreatorScene experience={experience} />
       </div>
     </div>
   );
