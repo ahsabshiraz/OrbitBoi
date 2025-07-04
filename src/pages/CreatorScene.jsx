@@ -27,7 +27,11 @@ export default function CreatorScene({ experience }) {
       <BackGround />
       <Suspense fallback={null}>
         {experience.models && experience.models.map((model) => (
-          <Model url={model.cloudinaryUrl} key={model.cloudinaryUrl} />
+          <Model 
+            url={model.cloudinaryUrl} 
+            modelId={model._id || model.cloudinaryUrl} 
+            key={model._id || model.cloudinaryUrl} 
+          />
         ))}
         {env && <Environment preset="city" background />}
       </Suspense>
