@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Eye, Download, MoreVertical } from 'lucide-react';
+import { Eye, Edit2, MoreVertical } from 'lucide-react';
 
 export default function ModelCard({ model }) {
   const [isHovered, setIsHovered] = useState(false);
 
+  const formattedDate = new Date(model.uploadedAt).toLocaleDateString(); // e.g., "7/4/2025"
   return (
     <div 
       className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-gray-200"
@@ -24,7 +25,7 @@ export default function ModelCard({ model }) {
             <Eye className="w-5 h-5 text-white" />
           </button>
           <button className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors">
-            <Download className="w-5 h-5 text-white" />
+            <Edit2 className="w-5 h-5 text-white" />
           </button>
           <button className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors">
             <MoreVertical className="w-5 h-5 text-white" />
@@ -34,11 +35,8 @@ export default function ModelCard({ model }) {
       
       <div className="p-4">
         <h3 className="font-semibold text-gray-800 mb-1">{model.name}</h3>
-        <p className="text-sm text-gray-500 mb-3">Updated {model.updated || '2 days ago'}</p>
+        <p className="text-sm text-gray-500 mb-3">Uploaded at {formattedDate}</p>
         <div className="flex items-center justify-between">
-          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-            {model.type || 'OBJ'}
-          </span>
           <span className="text-xs text-gray-400">
             {model.size || '2.4 MB'}
           </span>
