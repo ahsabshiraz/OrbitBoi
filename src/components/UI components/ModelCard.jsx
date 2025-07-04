@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Eye, Edit2, MoreVertical } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-export default function ModelCard({ model }) {
+export default function ModelCard({ experience }) {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
-  const formattedDate = new Date(model.uploadedAt).toLocaleDateString(); // e.g., "7/4/2025"
+  const formattedDate = new Date(experience.createdAt).toLocaleDateString(); // e.g., "7/4/2025"
   return (
     <div 
       className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-gray-200"
@@ -28,7 +28,7 @@ export default function ModelCard({ model }) {
           </button>
           <button
             className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors"
-            onClick={() => navigate(`/creator/${model._id}`)}
+            onClick={() => navigate(`/creator/${experience._id}`)}
           >
             <Edit2 className="w-5 h-5 text-white" />
           </button>
@@ -39,11 +39,11 @@ export default function ModelCard({ model }) {
       </div>
       
       <div className="p-4">
-        <h3 className="font-semibold text-gray-800 mb-1">{model.name}</h3>
+        <h3 className="font-semibold text-gray-800 mb-1">{experience.name}</h3>
         <p className="text-sm text-gray-500 mb-3">Uploaded at {formattedDate}</p>
         <div className="flex items-center justify-between">
           <span className="text-xs text-gray-400">
-            {model.size || '2.4 MB'}
+            {experience.size || '2.4 MB'}
           </span>
         </div>
       </div>

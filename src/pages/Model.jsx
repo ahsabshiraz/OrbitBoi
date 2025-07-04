@@ -1,7 +1,15 @@
-import { useGLTF } from "@react-three/drei";
-
+import { useGLTF, TransformControls } from "@react-three/drei";
+import useCreatorStore from "../store/CreatorStore/useCreatorStore";
 
 export default function Model({ url }) {
+    const { setEnabledControl } = useCreatorStore();
+
     const { scene } = useGLTF(url);
-    return <primitive object={scene} />;
+    return (
+        <TransformControls
+            onPointerEnter={() => { setEnabledControl(false) }}
+            onPointerLeave={() => { setEnabledControl(true) }}>
+            <primitive object={scene} />;
+        </TransformControls>
+    )
 }

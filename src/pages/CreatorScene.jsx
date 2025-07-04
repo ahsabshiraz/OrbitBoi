@@ -6,7 +6,7 @@ import BackGround from './backGround';
 import Model from './Model';
 
 
-export default function CreatorScene({ model }) {
+export default function CreatorScene({ experience }) {
   const { exposure, env, enabledControl, setEnabledControl } = useCreatorStore();
   return (
     <Canvas
@@ -17,12 +17,10 @@ export default function CreatorScene({ model }) {
     >
       <BackGround />
       <Suspense fallback={null}>
-        <TransformControls
-          onPointerEnter={() => { setEnabledControl(false) }}
-          onPointerLeave={() => { setEnabledControl(true) }}>
-          {model && <Model url={model.cloudinaryUrl} />}
-        </TransformControls>
-          {env && <Environment preset="city" background />}
+          {experience.models && experience.models.map((model) => (
+            <Model url={model.cloudinaryUrl} key={model.cloudinaryUrl} />
+          ))}
+        {env && <Environment preset="city" background />}
       </Suspense>
 
       <OrbitControls

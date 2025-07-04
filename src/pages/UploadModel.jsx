@@ -1,12 +1,12 @@
 import { useState, useRef } from 'react';
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 
-export default function UploadModal({ setShowUploadModal }) {
+export default function UploadModal({ onUploadSuccess }) {
     const [file, setFile] = useState(null);
+    const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef();
     const uploadModel = useCreatorStore((state) => state.uploadModel);
-    const loading = useCreatorStore((state) => state.loading)
-    const setShowUploadModel = useCreatorStore((state) => state.setShowUploadModel)
+    const setShowUploadModel = useCreatorStore((state) => state.setShowUploadModel);
     const handleFileChange = (e) => setFile(e.target.files[0]);
     const handleDrop = (e) => {
         e.preventDefault();
@@ -15,7 +15,20 @@ export default function UploadModal({ setShowUploadModal }) {
 
     const handleUpload = async () => {
         if (!file) return;
-        await uploadModel(file);
+        setUploading(true);
+        try {
+            await uploadModel(file);
+            setShowUploadModel(false);
+            // Refresh the experience data to show the new model
+            if (onUploadSuccess) {
+                onUploadSuccess();
+            }
+        } catch (err) {
+            console.error('Upload failed:', err);
+            alert('Upload failed. Please try again.');
+        } finally {
+            setUploading(false);
+        }
     };
 
     return (
@@ -33,7 +46,7 @@ export default function UploadModal({ setShowUploadModal }) {
                         ref={fileInputRef}
                         style={{ display: 'none' }}
                         onChange={handleFileChange}
-                        accept=".glb"
+                        accept=".glb,.gltf,.obj,.fbx"
                     />
                     <p className="text-gray-600 mb-2">
                         {file ? file.name : 'Drag and drop your 3D model here or click to browse files'}
@@ -43,16 +56,16 @@ export default function UploadModal({ setShowUploadModal }) {
                     <button
                         onClick={() => setShowUploadModel(false)}
                         className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                        disabled={loading}//gets disabled when uploading is true
+                        disabled={uploading}
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleUpload}
                         className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
-                        disabled={!file || loading}
+                        disabled={!file || uploading}
                     >
-                        {loading ? 'Uploading...' : 'Upload'}
+                        {uploading ? 'Uploading...' : 'Upload'}
                     </button>
                 </div>
             </div>

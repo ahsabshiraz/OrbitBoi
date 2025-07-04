@@ -2,11 +2,13 @@ import axios from 'axios';
 import { create } from 'zustand';
 
 const UploadSlice = (set, get) => ({
-    models: [],
+    experiences: [],
     loading: false,
     error: null,
     showUploadModel: false,
-
+    currentExperienceId: null,
+    
+    setCurrentExperienceId: (id) => set({ currentExperienceId: id }),
     setShowUploadModel: (flag) => {
         set({ showUploadModel: flag })
     },
@@ -20,14 +22,15 @@ const UploadSlice = (set, get) => ({
                     Authorization: `Bearer ${token}`,
                 },
             });
-            set({ models: res.data, loading: false });
+            set({ experiences: res.data, loading: false });
         } catch (err) {
             set({ error: 'Failed to fetch models', loading: false });
         }
     },
 
-    uploadModel: async (experienceId, file) => {
+    uploadModel: async (file) => {
         const token = localStorage.getItem('token');
+        const experienceId = get().currentExperienceId;
         const formData = new FormData();
         formData.append('model', file);
         try {
