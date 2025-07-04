@@ -1,13 +1,20 @@
 import { Canvas } from '@react-three/fiber';
-import { Environment, OrbitControls, TransformControls } from '@react-three/drei';
+import { Environment } from '@react-three/drei';
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 import { Suspense } from 'react';
 import BackGround from './backGround';
 import Model from './Model';
+import CameraSetup from './CameraSetup';
+// Custom Camera component that updates position dynamically
 
 
 export default function CreatorScene({ experience }) {
-  const { exposure, env, enabledControl, setEnabledControl } = useCreatorStore();
+  const { 
+    exposure, 
+    env,
+    cameraPosition,
+  } = useCreatorStore();
+
   return (
     <Canvas
       shadows
@@ -15,17 +22,14 @@ export default function CreatorScene({ experience }) {
       camera={{ position: [0, 1, 10], fov: 50 }}
     // style={{ height: '100%', width: '100%' }}
     >
+      <CameraSetup />
       <BackGround />
       <Suspense fallback={null}>
-          {experience.models && experience.models.map((model) => (
-            <Model url={model.cloudinaryUrl} key={model.cloudinaryUrl} />
-          ))}
+        {experience.models && experience.models.map((model) => (
+          <Model url={model.cloudinaryUrl} key={model.cloudinaryUrl} />
+        ))}
         {env && <Environment preset="city" background />}
       </Suspense>
-
-      <OrbitControls
-        enableRotate={enabledControl}
-      />
     </Canvas>
   );
 }

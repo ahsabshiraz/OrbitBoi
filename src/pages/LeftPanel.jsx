@@ -1,69 +1,167 @@
-import useCreatorStore from "../store/CreatorStore/useCreatorStore";
+import React from 'react';
+import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 
-export default function LeftPanel() {
+const LeftPanel = () => {
   const {
-    backgroundColor, setBackgroundColor,
-    exposure, setExposure,
-    fogEnabled, toggleFog,
-    env, setEnv,
-    fogMin, setFogMin,
-    fogMax, setFogMax
+    exposure,
+    setExposure,
+    env,
+    setEnv,
+    enabledDamping,
+    setEnabledDamping,
+    enabledPan,
+    setEnabledPan,
+    enabledRotate,
+    setEnabledRotate,
+    enabledZoom,
+    setEnabledZoom,
+    cameraPosition,
+    setCameraPositionX,
+    setCameraPositionY,
+    setCameraPositionZ,
+    lookAtPosition,
+    setLookAtPositionX,
+    setLookAtPositionY,
+    setLookAtPositionZ
   } = useCreatorStore();
 
   return (
-    <div className="w-full md:w-64 bg-white border-r p-4 space-y-6">
-      <div>
-        <label className="text-sm font-semibold">Background</label>
-        <input
-          type="color"
-          value={backgroundColor}
-          onChange={(e) => setBackgroundColor(e.target.value)}
-          className="w-full h-10 mt-1"
-        />
+    <div className="left-panel">
+      <h3>Camera Controls</h3>
+      
+      <div className="control-group">
+        <h4>Camera Position</h4>
+        <div className="input-group">
+          <label>X:</label>
+          <input
+            type="number"
+            value={cameraPosition.x}
+            onChange={(e) => setCameraPositionX(parseFloat(e.target.value) || 0)}
+            step="0.1"
+          />
+        </div>
+        <div className="input-group">
+          <label>Y:</label>
+          <input
+            type="number"
+            value={cameraPosition.y}
+            onChange={(e) => setCameraPositionY(parseFloat(e.target.value) || 0)}
+            step="0.1"
+          />
+        </div>
+        <div className="input-group">
+          <label>Z:</label>
+          <input
+            type="number"
+            value={cameraPosition.z}
+            onChange={(e) => setCameraPositionZ(parseFloat(e.target.value) || 0)}
+            step="0.1"
+          />
+        </div>
       </div>
 
-      <div>
-        <label className="text-sm font-semibold">Exposure</label>
-        <input
-          type="range"
-          min="0"
-          max="2"
-          step="0.1"
-          value={exposure}
-          onChange={(e) => setExposure(parseFloat(e.target.value))}
-          className="w-full mt-1"
-        />
+      <div className="control-group">
+        <h4>Look At Position</h4>
+        <div className="input-group">
+          <label>X:</label>
+          <input
+            type="number"
+            value={lookAtPosition.x}
+            onChange={(e) => setLookAtPositionX(parseFloat(e.target.value) || 0)}
+            step="0.1"
+          />
+        </div>
+        <div className="input-group">
+          <label>Y:</label>
+          <input
+            type="number"
+            value={lookAtPosition.y}
+            onChange={(e) => setLookAtPositionY(parseFloat(e.target.value) || 0)}
+            step="0.1"
+          />
+        </div>
+        <div className="input-group">
+          <label>Z:</label>
+          <input
+            type="number"
+            value={lookAtPosition.z}
+            onChange={(e) => setLookAtPositionZ(parseFloat(e.target.value) || 0)}
+            step="0.1"
+          />
+        </div>
       </div>
 
-      <div>
-        <label className="text-sm font-semibold">Fog</label>
-        <input type="checkbox" checked={fogEnabled} onChange={toggleFog} className="ml-2" />
+      <div className="control-group">
+        <h4>Orbit Controls</h4>
+        <div className="checkbox-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={enabledRotate}
+              onChange={setEnabledRotate}
+            />
+            Enable Rotate
+          </label>
+        </div>
+        <div className="checkbox-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={enabledZoom}
+              onChange={setEnabledZoom}
+            />
+            Enable Zoom
+          </label>
+        </div>
+        <div className="checkbox-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={enabledPan}
+              onChange={setEnabledPan}
+            />
+            Enable Pan
+          </label>
+        </div>
+        <div className="checkbox-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={enabledDamping}
+              onChange={setEnabledDamping}
+            />
+            Enable Damping
+          </label>
+        </div>
       </div>
 
-      <div>
-        <label className="text-sm font-semibold">Fog Min</label>
-        <input
-          type="number"
-          value={fogMin}
-          onChange={e => setFogMin(Number(e.target.value))}
-          className="w-full mt-1"
-        />
-      </div>
-
-      <div>
-        <label className="text-sm font-semibold">Fog Max</label>
-        <input
-          type="number"
-          value={fogMax}
-          onChange={e => setFogMax(Number(e.target.value))}
-          className="w-full mt-1"
-        />
-      </div>
-
-      <div>
-        <label className="text-sm font-semibold">Enviroment</label>
-        <input type="checkbox" checked={env} onChange={setEnv} className="ml-2" />
+      <div className="control-group">
+        <h4>Environment</h4>
+        <div className="input-group">
+          <label>Exposure:</label>
+          <input
+            type="range"
+            min="0"
+            max="2"
+            step="0.1"
+            value={exposure}
+            onChange={(e) => setExposure(parseFloat(e.target.value))}
+          />
+          <span>{exposure}</span>
+        </div>
+        <div className="checkbox-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={env}
+              onChange={setEnv}
+            />
+            Environment
+          </label>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default LeftPanel; 
