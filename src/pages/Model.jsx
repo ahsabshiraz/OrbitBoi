@@ -1,6 +1,6 @@
 import { useGLTF, TransformControls } from "@react-three/drei";
 import useCreatorStore from "../store/CreatorStore/useCreatorStore";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export default function Model({ url, modelId }) {
     const { 
@@ -8,17 +8,20 @@ export default function Model({ url, modelId }) {
         selectedModelId, 
         setSelectedModelId,
         modelPositions,
-        initializeModelPosition
+        initializeModelPosition,
+        setModelPositionX,
+        setModelPositionY,
+        setModelPositionZ
     } = useCreatorStore();
 
     const { scene } = useGLTF(url);
+    const transformControlsRef = useRef();
     
-    // Initialize model position when component mounts
     useEffect(() => {
-        if (modelId) {
-            initializeModelPosition(modelId);
+        if (modelId && !modelPositions[modelId]) {
+          initializeModelPosition(modelId);
         }
-    }, [modelId, initializeModelPosition]);
+      }, [modelId]);
 
     // Get current model position data
     const modelPosition = modelPositions[modelId] || { 
@@ -34,15 +37,32 @@ export default function Model({ url, modelId }) {
         setSelectedModelId(modelId);
     };
 
+    // Handle transform controls events
+    useEffect(() => {
+        const controls = transformControlsRef.current;
+        if (!controls || !isSelected) return;
+    
+        const updatePosition = () => {
+          const pos = controls.object.position;
+          setModelPositionX(modelId, pos.x);
+          setModelPositionY(modelId, pos.y);
+          setModelPositionZ(modelId, pos.z);
+        };
+    
+        controls.addEventListener("objectChange", updatePosition);
+    
+        return () => controls.removeEventListener("objectChange", updatePosition);
+      }, [isSelected, modelId]);
     return (
         <TransformControls
+            ref={transformControlsRef}
             onPointerEnter={() => { setEnabledControl(false) }}
             onPointerLeave={() => { setEnabledControl(true) }}
             enabled={isSelected}
+            position={[modelPosition.x, modelPosition.y, modelPosition.z]}
         >
             <primitive 
                 object={scene} 
-                position={[modelPosition.x, modelPosition.y, modelPosition.z]}
                 rotation={[modelPosition.rotationX, modelPosition.rotationY, modelPosition.rotationZ]}
                 scale={[modelPosition.scale, modelPosition.scale, modelPosition.scale]}
                 onClick={handleClick}
