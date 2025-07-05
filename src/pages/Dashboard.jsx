@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Upload, Grid, List, Plus, Eye, Download } from 'lucide-react';
-import ModelCard from '../components/UI components/ModelCard'
-import Header from '../components/UI components/Header'
+import React, { useEffect } from 'react';
+import { Plus, Grid } from 'lucide-react';
+import ModelCard from '../components/UI components/ModelCard';
+import Header from '../components/UI components/Header';
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,62 +15,57 @@ const Dashboard = () => {
   }, [fetchExperiences]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
+    <div className="min-h-screen bg-[#0D0D0D] text-zinc-100">
       <Header />
 
       <main className="p-6 max-w-7xl mx-auto">
-        {/* Dashboard Header */}
+        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 space-y-4 md:space-y-0">
-          <div>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-2">
-              Your 3D Models
-            </h2>
-          </div>
+          <h2 className="text-3xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            Your Experiences
+          </h2>
 
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={() => handleCreateExperience(navigate)}
-              className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
-            >
-              <Plus className="w-5 h-5" />
-              <span>Create</span>
-            </button>
-          </div>
+          <button
+            onClick={() => handleCreateExperience(navigate)}
+            className="flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-full shadow-xl transition transform hover:scale-105"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Create</span>
+          </button>
         </div>
 
-        {/* Stats Cards */}
+        {/* Stats Card */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <div className="bg-zinc-800/60 backdrop-blur-md rounded-xl p-6 shadow-lg border border-zinc-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Experiences</p>
-                <p className="text-2xl font-bold text-gray-900">{experiences.length === 0 ? '0' : experiences.length}</p>
+                <p className="text-sm font-medium text-zinc-400">Total Experiences</p>
+                <p className="text-2xl font-bold text-zinc-100">{experiences.length}</p>
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Grid className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 bg-zinc-700/50 rounded-lg flex items-center justify-center">
+                <Grid className="w-6 h-6 text-blue-400" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Models Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {experiences.map((experience) => (
-            <ModelCard key={experience._id} experience={experience} />
+        {/* Experiences Grid - 5 per row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          {experiences.map((exp) => (
+            <ModelCard key={exp._id} experience={exp} />
           ))}
         </div>
 
-        {/* Empty State (if no models) */}
-        {experiences.length === 0 && !loading && (
-          <div className="text-center py-16 text-gray-500">
-            No models found. Upload your first 3D model!
+        {/* Empty & Loading States */}
+        {!loading && experiences.length === 0 && (
+          <div className="text-center py-16 text-zinc-500">
+            No experiences found. Click “Create” to start one!
           </div>
         )}
 
-        {loading && <div>Loading...</div>}
-        {error && <div className="text-red-500">{error}</div>}
+        {loading && <div className="text-center py-8 text-zinc-400">Loading...</div>}
+        {error && <div className="text-center py-4 text-red-500">{error}</div>}
       </main>
-
     </div>
   );
 };

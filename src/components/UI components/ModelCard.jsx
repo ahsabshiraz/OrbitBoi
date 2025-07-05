@@ -1,51 +1,66 @@
 import React, { useState } from 'react';
-import { Eye, Edit2, MoreVertical } from 'lucide-react';
+import { Eye, Edit2, Trash2Icon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function ModelCard({ experience }) {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
-  const formattedDate = new Date(experience.createdAt).toLocaleDateString(); // e.g., "7/4/2025"
+  const formattedDate = new Date(experience.createdAt).toLocaleDateString();
+
+  const shapeIndex = parseInt(experience._id.slice(-1), 16) % 10;
+
+  const shapes = [
+    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 shadow-md" />, // Circle
+    <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rotate-45 shadow-md" />, // Diamond
+    <div className="w-8 h-8 rounded-md bg-gradient-to-br from-yellow-400 to-orange-500 shadow-md" />, // Rounded Square
+    <div className="w-0 h-0 border-l-[12px] border-r-[12px] border-b-[24px] border-l-transparent border-r-transparent border-b-blue-500" />, // Triangle
+    <div className="w-10 h-4 rounded-full bg-gradient-to-r from-green-400 to-teal-500 shadow-md" />, // Capsule
+    <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-pink-500 clip-hexagon shadow-md" />, // Hexagon
+    <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-yellow-500 clip-octagon shadow-md" />, // Octagon
+    <div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-500 skew-y-6 shadow-md" />, // Skewed Square
+    <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-fuchsia-500 rotate-12 shadow-md" />, // Tilted Box
+    <div className="w-8 h-8 bg-gradient-to-br from-rose-400 to-red-500 rounded-tl-full rounded-br-full shadow-md" />, // Blob
+  ];
+
   return (
-    <div 
-      className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-gray-200"
+    <div
+      className="group bg-[#111111] rounded-xl shadow hover:shadow-md transition-all duration-300 overflow-hidden border border-[#1F1F1F] hover:border-[#2A2A2A]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative aspect-square bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
-        {/* 3D Model Preview Placeholder */}
+      <div className="relative aspect-square bg-[#1A1A1A]">
+        {/* Shape Placeholder */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-            <span className="text-white font-bold text-lg">3D</span>
+          <div className="transform group-hover:scale-110 transition-transform duration-300">
+            {shapes[shapeIndex]}
           </div>
         </div>
-        
-        {/* Overlay on hover */}
-        <div className={`absolute inset-0 bg-black/40 flex items-center justify-center space-x-3 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-          <button className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors">
-            <Eye className="w-5 h-5 text-white" />
+
+        {/* Hover Overlay */}
+        <div
+          className={`absolute inset-0 bg-black/50 flex items-center justify-center space-x-2 transition-opacity duration-300 ${
+            isHovered ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <button className="p-1.5 bg-white/10 backdrop-blur-sm rounded-md hover:bg-white/20 transition-colors">
+            <Eye className="w-4 h-4 text-white" />
           </button>
           <button
-            className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors"
+            className="p-1.5 bg-white/10 backdrop-blur-sm rounded-md hover:bg-white/20 transition-colors"
             onClick={() => navigate(`/creator/${experience._id}`)}
           >
-            <Edit2 className="w-5 h-5 text-white" />
+            <Edit2 className="w-4 h-4 text-white" />
           </button>
-          <button className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors">
-            <MoreVertical className="w-5 h-5 text-white" />
+          <button className="p-1.5 bg-white/10 backdrop-blur-sm rounded-md hover:bg-white/20 transition-colors">
+            <Trash2Icon className="w-4 h-4 text-white" />
           </button>
         </div>
       </div>
-      
-      <div className="p-4">
-        <h3 className="font-semibold text-gray-800 mb-1">{experience.name}</h3>
-        <p className="text-sm text-gray-500 mb-3">Uploaded at {formattedDate}</p>
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-gray-400">
-            {experience.size || '2.4 MB'}
-          </span>
-        </div>
+
+      <div className="p-3">
+        <h3 className="font-semibold text-white text-sm mb-1 truncate">{experience.name}</h3>
+        <p className="text-xs text-zinc-400 mb-2">Uploaded on {formattedDate}</p>
       </div>
     </div>
   );
