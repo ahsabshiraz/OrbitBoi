@@ -60,6 +60,7 @@ export default function Model({ url, modelId }) {
             onPointerLeave={() => { setEnabledControl(true) }}
             enabled={isSelected}
             position={[modelPosition.x, modelPosition.y, modelPosition.z]}
+            size={modelPosition.scale}
         >
             <primitive 
                 object={scene} 
