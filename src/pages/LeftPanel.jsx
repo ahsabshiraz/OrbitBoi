@@ -12,7 +12,8 @@ import {
   FiImage,
   FiCloud,
   FiBox,
-  FiMaximize2
+  FiMaximize2,
+  FiRefreshCw
 } from 'react-icons/fi';
 
 const LeftPanel = () => {
@@ -26,6 +27,7 @@ const LeftPanel = () => {
     setLookAtPositionX,
     setLookAtPositionY,
     setLookAtPositionZ,
+    updateCameraFromCurrentScene,
     
     // Orbit controls
     enabledDamping,
@@ -63,7 +65,7 @@ const LeftPanel = () => {
     setModelRotationY,
     setModelRotationZ,
     setModelScale,
-    setSelectedModelId
+    setSelectedModelId,
   } = useCreatorStore();
 
   // Get current model position data
@@ -73,9 +75,28 @@ const LeftPanel = () => {
     scale: 1 
   }) : null;
 
+  // Handle update button click
+  const handleUpdatePositions = () => {
+    updateCameraFromCurrentScene();
+  };
+
   return (
     <div className="left-panel bg-zinc-900 p-4 h-full overflow-y-auto w-[20vw] min-w-[280px] border-r border-zinc-700 shadow-lg">
       <h2 className="text-xl font-bold text-zinc-100 mb-6 pb-2 border-b border-zinc-700">Scene Controls</h2>
+
+      {/* Update Positions Button */}
+      <div className="mb-6">
+        <button
+          onClick={handleUpdatePositions}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200 text-sm font-medium"
+        >
+          <FiRefreshCw className="w-4 h-4" />
+          Update Positions
+        </button>
+        <p className="text-xs text-zinc-400 mt-1 text-center">
+          Sync camera and model positions from scene
+        </p>
+      </div>
 
       {selectedModelId && currentModelPosition && (
         <div className="control-group mb-6">
