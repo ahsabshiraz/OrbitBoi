@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import { Suspense } from 'react';
-import BackGround from './backGround';
+import BackGround from './BackGround';
 import ViewerModel from './ViewerModel';
 import ViewerCameraSetup from './ViewerCameraSetup';
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';

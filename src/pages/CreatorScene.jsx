@@ -2,7 +2,7 @@ import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 import { Suspense } from 'react';
-import BackGround from './backGround';
+import BackGround from './BackGround';
 import Model from './Model';
 import CameraSetup from './CameraSetup';
 // Custom Camera component that updates position dynamically
