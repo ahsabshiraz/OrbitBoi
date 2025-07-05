@@ -254,7 +254,30 @@ const CreatorSlice = (set, get) => ({
     setModelUrl: (url) => set({ modelUrl: url }),
     setEnv: () => set((state) => ({ env: !state.env })),
     setFogMin: (value) => set({ fogMin: value }),
-    setFogMax: (value) => set({ fogMax: value })
+    setFogMax: (value) => set({ fogMax: value }),
+
+    // Delete experience
+    deleteExperience: async (experienceId) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:5000/api/experiences/${experienceId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to delete experience');
+            }
+            
+            return { success: true, message: 'Experience deleted successfully' };
+        } catch (error) {
+            console.error('Failed to delete experience:', error);
+            throw error;
+        }
+    }
 });
 
 export default CreatorSlice; 

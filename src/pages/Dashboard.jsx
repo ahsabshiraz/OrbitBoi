@@ -14,6 +14,11 @@ const Dashboard = () => {
     fetchExperiences();
   }, [fetchExperiences]);
 
+  const handleDeleteExperience = (deletedExperienceId) => {
+    // Refresh the experiences list after deletion
+    fetchExperiences();
+  };
+
   return (
     <div className="min-h-screen bg-[#0D0D0D] text-zinc-100">
       <Header />
@@ -52,14 +57,18 @@ const Dashboard = () => {
         {/* Experiences Grid - 5 per row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {experiences.map((exp) => (
-            <ModelCard key={exp._id} experience={exp} />
+            <ModelCard 
+              key={exp._id} 
+              experience={exp} 
+              onDelete={handleDeleteExperience}
+            />
           ))}
         </div>
 
         {/* Empty & Loading States */}
         {!loading && experiences.length === 0 && (
           <div className="text-center py-16 text-zinc-500">
-            No experiences found. Click “Create” to start one!
+            No experiences found. Click "Create" to start one!
           </div>
         )}
 

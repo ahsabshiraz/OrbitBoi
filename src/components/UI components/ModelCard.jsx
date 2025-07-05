@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Eye, Edit2, Trash2Icon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import useCreatorStore from '../../store/CreatorStore/useCreatorStore';
 
-export default function ModelCard({ experience }) {
+export default function ModelCard({ experience, onDelete }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
+  const { deleteExperience } = useCreatorStore();
 
   const formattedDate = new Date(experience.createdAt).toLocaleDateString();
 
@@ -22,6 +25,29 @@ export default function ModelCard({ experience }) {
     <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-fuchsia-500 rotate-12 shadow-md" />, // Tilted Box
     <div className="w-8 h-8 bg-gradient-to-br from-rose-400 to-red-500 rounded-tl-full rounded-br-full shadow-md" />, // Blob
   ];
+
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${experience.name}"? This action cannot be undone.`
+    );
+    
+    if (!confirmed) return;
+    
+    setIsDeleting(true);
+    try {
+      await deleteExperience(experience._id);
+      // Call the onDelete callback to refresh the parent component
+      if (onDelete) {
+        onDelete(experience._id);
+      }
+    } catch (error) {
+      alert(`Failed to delete experience: ${error.message}`);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <div
@@ -52,8 +78,16 @@ export default function ModelCard({ experience }) {
           >
             <Edit2 className="w-4 h-4 text-white" />
           </button>
-          <button className="p-1.5 bg-white/10 backdrop-blur-sm rounded-md hover:bg-white/20 transition-colors">
-            <Trash2Icon className="w-4 h-4 text-white" />
+          <button 
+            className={`p-1.5 backdrop-blur-sm rounded-md transition-colors ${
+              isDeleting 
+                ? 'bg-red-500/20 cursor-not-allowed' 
+                : 'bg-white/10 hover:bg-red-500/20'
+            }`}
+            onClick={handleDelete}
+            disabled={isDeleting}
+          >
+            <Trash2Icon className={`w-4 h-4 ${isDeleting ? 'text-red-400' : 'text-white'}`} />
           </button>
         </div>
       </div>
