@@ -4,6 +4,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './components/PrivateRoute';
 import Creator from './pages/Creator';
+import Viewer from './pages/Viewer';
 
 export default function App() {
   return (
@@ -19,7 +20,22 @@ export default function App() {
             </PrivateRoute>
           }
         />
-          <Route path="/creator/:id" element={<Creator />} />
+        <Route 
+          path="/creator/:id" 
+          element={
+            <PrivateRoute>
+              <Creator />
+            </PrivateRoute>
+          } 
+        />
+        <Route 
+          path="/viewer/:experienceId" 
+          element={
+            <PrivateRoute>
+              <Viewer />
+            </PrivateRoute>
+          } 
+        />
         <Route path="*" element={<Login />} />
       </Routes>
     </BrowserRouter>

@@ -69,7 +69,10 @@ export default function ModelCard({ experience, onDelete }) {
             isHovered ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <button className="p-1.5 bg-white/10 backdrop-blur-sm rounded-md hover:bg-white/20 transition-colors">
+          <button 
+            className="p-1.5 bg-white/10 backdrop-blur-sm rounded-md hover:bg-white/20 transition-colors"
+            onClick={() => navigate(`/viewer/${experience._id}`)}
+          >
             <Eye className="w-4 h-4 text-white" />
           </button>
           <button
