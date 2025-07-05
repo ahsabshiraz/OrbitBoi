@@ -1,3 +1,5 @@
+import API_BASE_URL from '../../config/api';
+
 const CreatorSlice = (set, get) => ({
     backgroundColor: '#ffffff',
     exposure: 1,
@@ -55,7 +57,7 @@ const CreatorSlice = (set, get) => ({
                 modelPositions: state.modelPositions
             };
             
-            const response = await fetch(`http://localhost:5000/api/experiences/${experienceId}/scene`, {
+            const response = await fetch(`${API_BASE_URL}/api/experiences/${experienceId}/scene`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -85,7 +87,7 @@ const CreatorSlice = (set, get) => ({
     loadSceneData: async (experienceId) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5000/api/experiences/${experienceId}/scene`, {
+            const response = await fetch(`${API_BASE_URL}/api/experiences/${experienceId}/scene`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -260,7 +262,7 @@ const CreatorSlice = (set, get) => ({
     deleteExperience: async (experienceId) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5000/api/experiences/${experienceId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/experiences/${experienceId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { API_ENDPOINTS } from '../config/api';
 
-const API = 'http://localhost:5000/api/auth'; // Change if backend URL is different
+const API = API_ENDPOINTS.AUTH;
 
 export const register = async (data) => {
   const res = await axios.post(`${API}/register`, data);

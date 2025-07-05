@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../config/api';
 import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import { Suspense } from 'react';
@@ -28,7 +29,7 @@ const Viewer = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/api/experiences/${experienceId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/experiences/${experienceId}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

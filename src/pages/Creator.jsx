@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import API_BASE_URL from '../config/api';
 import CreatorScene from "./CreatorScene";
 import LeftPanel from "./LeftPanel";
 import { Plus, Save, Check } from 'lucide-react';
@@ -20,7 +21,7 @@ export default function Creator() {
   const fetchExperience = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/experiences/${id}`, {
+      const response = await axios.get(`${API_BASE_URL}/api/experiences/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

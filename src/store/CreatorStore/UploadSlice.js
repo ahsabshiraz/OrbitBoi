@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { create } from 'zustand';
+import API_BASE_URL from '../../config/api';
 
 const UploadSlice = (set, get) => ({
     experiences: [],
@@ -17,7 +18,7 @@ const UploadSlice = (set, get) => ({
         set({ loading: true, error: null });
         const token = localStorage.getItem('token')
         try {
-            const res = await axios.get('http://localhost:5000/api/experiences', {
+            const res = await axios.get(`${API_BASE_URL}/api/experiences`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -35,7 +36,7 @@ const UploadSlice = (set, get) => ({
         formData.append('model', file);
         try {
             const res = await axios.post(
-                `http://localhost:5000/api/experiences/${experienceId}/models`,
+                `${API_BASE_URL}/api/experiences/${experienceId}/models`,
                 formData,
                 {
                     headers: {
@@ -54,7 +55,7 @@ const UploadSlice = (set, get) => ({
         const token = localStorage.getItem('token')
         try {
             const res = await axios.post(
-                'http://localhost:5000/api/experiences',
+                `${API_BASE_URL}/api/experiences`,
                 experienceData,
                 {
                     headers: {
