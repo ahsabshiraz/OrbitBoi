@@ -6,7 +6,7 @@ const CameraSetup = (set, get) => ({
     enabledControl: true,
     
     // Camera position
-    cameraPosition: { x: 0, y: 1, z: 10 },
+    cameraPosition: { x: 100, y: 100, z: 0 },
     setCameraPositionX: (x) => set((state) => ({ cameraPosition: { ...state.cameraPosition, x } })),
     setCameraPositionY: (y) => set((state) => ({ cameraPosition: { ...state.cameraPosition, y } })),
     setCameraPositionZ: (z) => set((state) => ({ cameraPosition: { ...state.cameraPosition, z } })),

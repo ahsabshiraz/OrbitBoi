@@ -1,4 +1,5 @@
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
+import * as THREE from 'three';
 
 export default function BackGround() {
     const { backgroundColor, fogEnabled, fogMin, fogMax } = useCreatorStore();
@@ -7,7 +8,7 @@ export default function BackGround() {
         <>
             <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.2, 0]}>
                 <planeGeometry args={[100, 100]} />
-                <meshStandardMaterial color="#404040" />
+                <meshStandardMaterial color="#404040" side={THREE.DoubleSide}/>
             </mesh>
 
             <color attach="background" args={[backgroundColor]} />

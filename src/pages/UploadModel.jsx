@@ -4,13 +4,34 @@ import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 export default function UploadModal({ onUploadSuccess }) {
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
+    const [fileTooLarge, setFileTooLarge] = useState(false); // <-- Add this line
     const fileInputRef = useRef();
     const uploadModel = useCreatorStore((state) => state.uploadModel);
     const setShowUploadModel = useCreatorStore((state) => state.setShowUploadModel);
-    const handleFileChange = (e) => setFile(e.target.files[0]);
+
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        if (selectedFile && selectedFile.size > MAX_FILE_SIZE) {
+            setFileTooLarge(true);
+            setFile(null);
+        } else {
+            setFileTooLarge(false);
+            setFile(selectedFile);
+        }
+    };
+
     const handleDrop = (e) => {
         e.preventDefault();
-        setFile(e.dataTransfer.files[0]);
+        const droppedFile = e.dataTransfer.files[0];
+        if (droppedFile && droppedFile.size > MAX_FILE_SIZE) {
+            setFileTooLarge(true);
+            setFile(null);
+        } else {
+            setFileTooLarge(false);
+            setFile(droppedFile);
+        }
     };
 
     const handleUpload = async () => {
@@ -51,6 +72,12 @@ export default function UploadModal({ onUploadSuccess }) {
                     <p className="text-gray-600 mb-2">
                         {file ? file.name : 'Drag and drop your 3D model here or click to browse files'}
                     </p>
+                    <p className="text-xs text-gray-500">Maximum file size: 10 MB</p>
+                    {fileTooLarge && (
+                        <p className="text-xs text-red-500 mt-2">
+                            File is too large. Please select a file under 10 MB.
+                        </p>
+                    )}
                 </div>
                 <div className="flex space-x-3">
                     <button
