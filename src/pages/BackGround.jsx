@@ -6,7 +6,7 @@ export default function BackGround() {
     return (
         <>
             <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.2, 0]}>
-                <planeGeometry args={[500, 500]} />
+                <planeGeometry args={[100, 100]} />
                 <meshStandardMaterial color="#404040" />
             </mesh>
 
