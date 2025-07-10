@@ -65,8 +65,8 @@ export default function Creator() {
     <div className="flex h-screen overflow-hidden">
       <LeftPanel experience={experience} />
       <div className="flex-1 relative">
-        {/* Top Controls */}
-        <div className="absolute top-4 right-4 z-10 flex items-center space-x-3">
+        {/* Top Controls - Moved to Left Side */}
+        <div className="absolute top-4 left-4 z-10 flex items-center space-x-3">
           {/* Save Button */}
           <button
             onClick={handleSave}
