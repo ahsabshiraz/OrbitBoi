@@ -3,20 +3,16 @@ import useCreatorStore from "../store/CreatorStore/useCreatorStore";
 import { useEffect, useRef } from "react";
 
 export default function Model({ url, modelId }) {
-    const { 
-        setEnabledControl, 
+    const {  
         selectedModelId, 
         setSelectedModelId,
         modelPositions,
         initializeModelPosition,
-        setModelPositionX,
-        setModelPositionY,
-        setModelPositionZ
+        setTransformControlsRef,
     } = useCreatorStore();
 
     const { scene } = useGLTF(url);
-    const transformControlsRef = useRef();
-    
+    const transformRef = useRef(); 
     useEffect(() => {
         if (modelId && !modelPositions[modelId]) {
           initializeModelPosition(modelId);
@@ -39,34 +35,24 @@ export default function Model({ url, modelId }) {
 
     // Handle transform controls events
     useEffect(() => {
-        const controls = transformControlsRef.current;
-        if (!controls || !isSelected) return;
-    
-        const updatePosition = () => {
-          const pos = controls.object.position;
-          setModelPositionX(modelId, pos.x);
-          setModelPositionY(modelId, pos.y);
-          setModelPositionZ(modelId, pos.z);
-        };
-    
-        controls.addEventListener("objectChange", updatePosition);
-    
-        return () => controls.removeEventListener("objectChange", updatePosition);
-      }, [isSelected, modelId]);
+         if (isSelected && transformRef.current) {
+            setTransformControlsRef(transformRef.current);
+        }
+    }, [isSelected, setTransformControlsRef]);
     return (
         <TransformControls
-            ref={transformControlsRef}
-            onPointerEnter={() => { setEnabledControl(false) }}
-            onPointerLeave={() => { setEnabledControl(true) }}
+            ref={transformRef}
             enabled={isSelected}
             position={[modelPosition.x, modelPosition.y, modelPosition.z]}
-            size={modelPosition.scale}
+            size={1}
+            mode="translate"
         >
             <primitive 
                 object={scene} 
                 rotation={[modelPosition.rotationX, modelPosition.rotationY, modelPosition.rotationZ]}
                 scale={[modelPosition.scale, modelPosition.scale, modelPosition.scale]}
                 onClick={handleClick}
+                visible={true}
             />
         </TransformControls>
     );

@@ -3,7 +3,6 @@ const CameraSetup = (set, get) => ({
     enabledPan: true,
     enabledRotate: true,
     enabledZoom: true,
-    enabledControl: true,
     
     // Camera position
     cameraPosition: { x: 100, y: 100, z: 0 },
@@ -62,7 +61,6 @@ const CameraSetup = (set, get) => ({
     setEnabledPan: () => set((state) => ({ enabledPan: !state.enabledPan })),
     setEnabledRotate: () => set((state) => ({ enabledRotate: !state.enabledRotate })),
     setEnabledZoom: () => set((state) => ({ enabledZoom: !state.enabledZoom })),
-    setEnabledControl: (flag) => set({ enabledControl: flag }),
 });
 
 export default CameraSetup;

@@ -1,5 +1,5 @@
 import { Vector3 } from 'three';
-import { useThree} from '@react-three/fiber';
+import { useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { useEffect, useRef } from 'react';
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
@@ -8,7 +8,6 @@ function CameraSetup() {
     const {
         cameraPosition,
         lookAtPosition,
-        enabledControl,
         enabledRotate,
         enabledZoom,
         enabledPan,
@@ -32,10 +31,11 @@ function CameraSetup() {
 
     return (
         <OrbitControls
+            makeDefault
             ref={controlsRef}
             enableDamping={enabledDamping}
             enablePan={enabledPan}
-            enableRotate={enabledRotate && enabledControl}
+            enableRotate={enabledRotate}
             enableZoom={enabledZoom}
             target={new Vector3(lookAtPosition.x, lookAtPosition.y, lookAtPosition.z)}
         />

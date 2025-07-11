@@ -24,17 +24,24 @@ const LeftPanel = () => {
     };
   }, [store.selectedModelId, store.modelPositions]);
 
+  const handleSyncCamera = () => {
+    store.updateCameraFromCurrentScene();
+    if (store.transformControlsRef && store.selectedModelId) {
+        store.updateTransfromControlsFromScene(store.transformControlsRef, store.selectedModelId);
+    }
+};
+
   return (
     <>
       {/* Sync Camera Button - Always Top Center */}
       <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center">
         <button
-          onClick={store.updateCameraFromCurrentScene}
+          onClick={handleSyncCamera}
           className="group bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-5 py-2 rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300 flex items-center gap-2 hover:scale-105"
           title="Sync Camera"
         >
           <FiCamera className="w-5 h-5" />
-          <span className="font-medium">Sync Camera</span>
+          <span className="font-medium">Set Values</span>
         </button>
       </div>
 

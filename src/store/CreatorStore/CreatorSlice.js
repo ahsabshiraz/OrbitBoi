@@ -250,6 +250,17 @@ const CreatorSlice = (set, get) => ({
         }));
     },
 
+    //  Update transfrom controls position from current scene state
+    updateTransfromControlsFromScene: (transformControls, modelId) => {
+        if (transformControls && modelId) {
+            const pos = transformControls.object.position;
+            get().setModelPositionX(modelId, pos.x);
+            get().setModelPositionY(modelId, pos.y);
+            get().setModelPositionZ(modelId, pos.z);
+        }
+    },
+    setTransformControlsRef: (ref) => set({ transformControlsRef: ref }),
+    transformControlsRef: null,
     setBackgroundColor: (color) => set({ backgroundColor: color }),
     setExposure: (value) => set({ exposure: value }),
     toggleFog: () => set((state) => ({ fogEnabled: !state.fogEnabled })),
