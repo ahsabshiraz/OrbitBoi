@@ -8,7 +8,7 @@ const CreatorSlice = (set, get) => ({
     env: false,
     fogMin: 10,
     fogMax: 100,
-    
+    ground: true,
     // Model position controls
     selectedModelId: null,
     modelPositions: {}, // { modelId: { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, rotationZ: 0, scale: 1 } }
@@ -18,7 +18,7 @@ const CreatorSlice = (set, get) => ({
     lastSaved: null,
     
     setSelectedModelId: (modelId) => set({ selectedModelId: modelId }),
-    
+    setGround:() => set((state) => ({ ground: !state.ground })),
     // Save scene data to backend
     saveSceneData: async (experienceId) => {
         const state = get();

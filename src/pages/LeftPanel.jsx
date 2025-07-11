@@ -346,7 +346,7 @@ const EnvironmentControls = ({ store }) => (
         <FiSun className="w-5 h-5 text-orange-400" />
         <span className="text-sm text-zinc-200 font-medium">Environment</span>
       </div>
-      <PremiumToggle checked={store.env} onChange={store.setEnv} />
+      <PremiumToggle checked={store.env} onChange={() => { store.setEnv(); store.setGround(); }} />
     </div>
   </div>
 );
