@@ -9,12 +9,16 @@ import CameraSetup from './CameraSetup';
 
 
 export default function CreatorScene({ experience }) {
-  const { 
-    exposure, 
+  const {
+    exposure,
     env,
     backgroundColor,
+    hdrRadius,
+    hdrHeight,
+    hdrScale,
+    hdrType,
   } = useCreatorStore();
-//  console.log('CurrentExperience', experience)
+  //  console.log('CurrentExperience', experience)
   return (
     <Canvas
       shadows
@@ -33,7 +37,17 @@ export default function CreatorScene({ experience }) {
             key={model._id || model.cloudinaryUrl} 
           />
         ))}
-        {env && <Environment preset="city" background />}
+        {env && (
+          <Environment
+            preset={hdrType}
+            background
+            ground={{
+              radius: hdrRadius,
+              height: hdrHeight,
+              scale: hdrScale,
+            }}
+          />
+        )}
       </Suspense>
     </Canvas>
   );

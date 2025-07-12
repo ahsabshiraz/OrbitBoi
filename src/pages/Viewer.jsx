@@ -17,12 +17,16 @@ const Viewer = () => {
   const [experience, setExperience] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  const { 
+
+  const {
     loadSceneData,
-    exposure, 
+    exposure,
     env,
     backgroundColor,
+    hdrRadius,
+    hdrHeight,
+    hdrScale,
+    hdrType,
   } = useCreatorStore();
 
   useEffect(() => {
@@ -42,7 +46,7 @@ const Viewer = () => {
 
         const data = await response.json();
         setExperience(data);
-        
+
         // Load scene data for this experience
         await loadSceneData(experienceId);
       } catch (err) {
@@ -110,7 +114,7 @@ const Viewer = () => {
             <p className="text-sm text-zinc-400">View Mode</p>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <button
             onClick={() => navigate(`/creator/${experienceId}`)}
@@ -134,13 +138,21 @@ const Viewer = () => {
           <BackGround />
           <Suspense fallback={null}>
             {experience.models && experience.models.map((model) => (
-              <ViewerModel 
-                url={model.cloudinaryUrl} 
-                modelId={model._id || model.cloudinaryUrl} 
-                key={model._id || model.cloudinaryUrl} 
+              <ViewerModel
+                url={model.cloudinaryUrl}
+                modelId={model._id || model.cloudinaryUrl}
+                key={model._id || model.cloudinaryUrl}
               />
             ))}
-            {env && <Environment preset="city" background />}
+            {env && <Environment
+              preset={hdrType}
+              background
+              ground={{
+                radius: hdrRadius,
+                height: hdrHeight,
+                scale: hdrScale,
+              }}
+            />}
           </Suspense>
         </Canvas>
       </div>

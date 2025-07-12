@@ -46,8 +46,14 @@ const CreatorSlice = (set, get) => ({
                 // Environment settings
                 environment: {
                     exposure: state.exposure,
-                    env: state.env,
-                    backgroundColor: state.backgroundColor
+                    backgroundColor: state.backgroundColor,
+                    hdr: {
+                        enabled: state.env,
+                        hdrRadius: state.hdrRadius,
+                        hdrHeight: state.hdrHeight,
+                        hdrScale: state.hdrScale,
+                        hdrType: state.hdrType || 'forest',
+                    },
                 },
                 
                 // Fog settings
@@ -133,8 +139,14 @@ const CreatorSlice = (set, get) => ({
                 },
                 environment: {
                     exposure: sceneData.environment?.exposure ?? 1,
-                    env: sceneData.environment?.env ?? false,
-                    backgroundColor: sceneData.environment?.backgroundColor ?? '#ffffff'
+                    backgroundColor: sceneData.environment?.backgroundColor ?? '#ffffff',
+                    hdr: {
+                        enabled: sceneData.environment?.hdr?.enabled ?? false,
+                        hdrRadius: sceneData.environment?.hdr?.hdrRadius ?? 115,
+                        hdrHeight: sceneData.environment?.hdr?.hdrHeight ?? 10,
+                        hdrScale: sceneData.environment?.hdr?.hdrScale ?? 150,
+                        hdrType: sceneData.environment?.hdr?.hdrType ?? 'forest',
+                    },
                 },
                 ground: {
                     enabled: sceneData.ground?.enabled ?? true,
@@ -162,8 +174,12 @@ const CreatorSlice = (set, get) => ({
                 
                 // Environment settings
                 exposure: safeSceneData.environment.exposure,
-                env: safeSceneData.environment.env,
                 backgroundColor: safeSceneData.environment.backgroundColor,
+                env: safeSceneData.environment.hdr.enabled,
+                hdrRadius: safeSceneData.environment.hdr.hdrRadius,
+                hdrHeight: safeSceneData.environment.hdr.hdrHeight,
+                hdrScale: safeSceneData.environment.hdr.hdrScale,
+                hdrType: safeSceneData.environment.hdr.hdrType,
                 
                 // Fog settings
                 fogEnabled: safeSceneData.fog.enabled,
@@ -293,6 +309,14 @@ const CreatorSlice = (set, get) => ({
     setFogMax: (value) => set({ fogMax: value }),
     setGroundLength: (value) => set({groundLength: value}),
     setGroundWidth: (value) => set({groundWidth: value}),
+    hdrHeight: 10,
+    hdrRadius: 115,
+    hdrScale: 150,
+    hdrType: 'forest',
+    setHdrRadius: (value) => set({ hdrRadius: value }),
+    setHdrHeight: (value) => set({ hdrHeight: value }),
+    setHdrScale: (value) => set({ hdrScale: value }),
+    setHdrType: (value) => set({ hdrType: value }),
     // Delete experience
     deleteExperience: async (experienceId) => {
         try {

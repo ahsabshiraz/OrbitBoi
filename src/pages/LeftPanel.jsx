@@ -16,6 +16,9 @@ const LeftPanel = () => {
   const [activeTab, setActiveTab] = useState('bg');
   const [showPanel, setShowPanel] = useState(false);
   const store = useCreatorStore();
+  
+  console.log("hieght ,sacale , radius ", store.hdrHeight, store.hdrScale,  store.hdrRadius)
+
 
   const currentModel = useMemo(() => {
     if (!store.selectedModelId) return null;
@@ -388,6 +391,62 @@ const EnvironmentControls = ({ store }) => (
         <span className="text-sm text-zinc-200 font-medium">Environment</span>
       </div>
       <PremiumToggle checked={store.env} onChange={() => { store.setEnv(); store.setGround(); }} />
+    </div>
+    {/* Add Environment Ground Controls */}
+    <div className="mt-4 space-y-2">
+      <span className="text-xs text-zinc-400 font-medium">Ground (Environment)</span>
+      <div>
+        <span className="text-xs text-zinc-400">HDR Type</span>
+        <select
+          value={store.hdrType}
+          onChange={e => store.setHdrType(e.target.value)}
+          className="w-full bg-black/50 text-white text-xs px-2 py-1 rounded border border-white/10 focus:border-blue-500 focus:outline-none mb-2"
+        >
+          <option value="apartment">apartment</option>
+          <option value="city">city</option>
+          <option value="dawn">dawn</option>
+          <option value="forest">forest</option>
+          <option value="lobby">lobby</option>
+          <option value="night">night</option>
+          <option value="park">park</option>
+          <option value="studio">studio</option>
+          <option value="sunset">sunset</option>
+          <option value="warehouse">warehouse</option>
+        </select>
+      </div>
+      <div>
+        <span className="text-xs text-zinc-400">Radius</span>
+        <Slider
+          value={store.hdrRadius}
+          onChange={store.setHdrRadius}
+          min={1}
+          max={1000}
+          step={1}
+          color="blue"
+        />
+      </div>
+      <div>
+        <span className="text-xs text-zinc-400">Height</span>
+        <Slider
+          value={store.hdrHeight}
+          onChange={store.setHdrHeight}
+          min={30}
+          max={100}
+          step={1}
+          color="blue"
+        />
+      </div>
+      <div>
+        <span className="text-xs text-zinc-400">Scale</span>
+        <Slider
+          value={store.hdrScale}
+          onChange={store.setHdrScale}
+          min={150}
+          max={890}
+          step={1}
+          color="blue"
+        />
+      </div>
     </div>
   </div>
 );
