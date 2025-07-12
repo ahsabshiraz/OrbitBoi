@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import BackGround from './BackGround';
 import Model from './Model';
 import CameraSetup from './CameraSetup';
+import LoadingScreen3D from '../components/UI components/LoadingScreen3D';
 // Custom Camera component that updates position dynamically
 
 
@@ -29,7 +30,7 @@ export default function CreatorScene({ experience }) {
     >
       <CameraSetup />
       <BackGround />
-      <Suspense fallback={null}>
+      <Suspense fallback={<LoadingScreen3D/>}>
         {experience.models && experience.models.map((model) => (
           <Model 
             url={model.cloudinaryUrl} 
