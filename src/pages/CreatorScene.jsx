@@ -38,6 +38,7 @@ export default function CreatorScene({ experience }) {
             key={model._id || model.cloudinaryUrl} 
           />
         ))}
+      </Suspense>
         {env && (
           <Environment
             preset={hdrType}
@@ -49,7 +50,6 @@ export default function CreatorScene({ experience }) {
             }}
           />
         )}
-      </Suspense>
     </Canvas>
   );
 }
