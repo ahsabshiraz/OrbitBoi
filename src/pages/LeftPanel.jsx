@@ -185,6 +185,47 @@ const BackgroundControls = ({ store }) => (
         </div>
       )}
     </div>
+    {/* Ground Type Controls */}
+    <div className="bg-white/5 rounded-lg p-2">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs text-zinc-200 font-medium">Ground</span>
+        <PremiumToggle checked={store.ground} onChange={store.setGround} />
+      </div>
+      {store.ground && (
+        <>
+          <div className="mb-2">
+            <select 
+              value={store.groundType} 
+              onChange={e => store.setGroundType(e.target.value)}
+              className="w-full bg-black/50 text-white text-xs px-2 py-1 rounded border border-white/10 focus:border-blue-500 focus:outline-none"
+            >
+              <option value="plane">Simple Plane</option>
+              <option value="metal">Metal</option>
+              <option value="reflective">Reflective</option>
+              <option value="sand">Sand</option>
+              <option value="terrain">Terrain</option>
+              <option value="floor">Floor</option>
+              <option value="rocky">Rocky</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <NumberInput
+              label="Length"
+              value={store.groundLength}
+              onChange={store.setGroundLength}
+              compact
+            />
+            <NumberInput
+              label="Width"
+              value={store.groundWidth}
+              onChange={store.setGroundWidth}
+              compact
+            />
+          </div>
+        </>
+      )}
+    </div>
   </div>
 );
 

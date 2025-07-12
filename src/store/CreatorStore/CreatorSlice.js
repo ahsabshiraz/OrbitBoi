@@ -9,6 +9,10 @@ const CreatorSlice = (set, get) => ({
     fogMin: 10,
     fogMax: 100,
     ground: true,
+    groundLength: 100,
+    groundWidth: 100,
+    groundType: "plane", // default
+    setGroundType: (type) => set({ groundType: type }),
     // Model position controls
     selectedModelId: null,
     modelPositions: {}, // { modelId: { x: 0, y: 0, z: 0, rotationX: 0, rotationY: 0, rotationZ: 0, scale: 1 } }
@@ -52,7 +56,14 @@ const CreatorSlice = (set, get) => ({
                     min: state.fogMin,
                     max: state.fogMax
                 },
-                
+
+                // ground settings
+                ground: {
+                    enabled: state.ground,
+                    groundType: state.groundType,
+                    length: state.groundLength,
+                    width: state.groundWidth,
+                },
                 // Model positions
                 modelPositions: state.modelPositions
             };
@@ -125,6 +136,12 @@ const CreatorSlice = (set, get) => ({
                     env: sceneData.environment?.env ?? false,
                     backgroundColor: sceneData.environment?.backgroundColor ?? '#ffffff'
                 },
+                ground: {
+                    enabled: sceneData.ground?.enabled ?? true,
+                    groundType: sceneData.ground?.groundType ?? 'plane',
+                    length: sceneData.ground?.length ?? 100,
+                    width: sceneData.ground?.width ?? 100,
+                },
                 fog: {
                     enabled: sceneData.fog?.enabled ?? false,
                     min: sceneData.fog?.min ?? 10,
@@ -152,6 +169,12 @@ const CreatorSlice = (set, get) => ({
                 fogEnabled: safeSceneData.fog.enabled,
                 fogMin: safeSceneData.fog.min,
                 fogMax: safeSceneData.fog.max,
+
+                //ground setting
+                ground: safeSceneData.ground.enabled,
+                groundType: safeSceneData.ground.groundType,
+                groundLength: safeSceneData.ground.length,
+                groundWidth: safeSceneData.ground.width,
                 
                 // Model positions
                 modelPositions: safeSceneData.modelPositions
@@ -268,7 +291,8 @@ const CreatorSlice = (set, get) => ({
     setEnv: () => set((state) => ({ env: !state.env })),
     setFogMin: (value) => set({ fogMin: value }),
     setFogMax: (value) => set({ fogMax: value }),
-
+    setGroundLength: (value) => set({groundLength: value}),
+    setGroundWidth: (value) => set({groundWidth: value}),
     // Delete experience
     deleteExperience: async (experienceId) => {
         try {

@@ -7,7 +7,7 @@ import LeftPanel from "./LeftPanel";
 import { Plus, Save, Check } from 'lucide-react';
 import UploadModal from './UploadModel';
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
-
+import LoadingScreen from '../components/UI components/LoadingScreen';
 export default function Creator() {
   const { id } = useParams();
   const [experience, setExperience] = useState(null);
@@ -57,7 +57,7 @@ export default function Creator() {
     }
   }, [id, setCurrentExperienceId, loadSceneData]);
 
-  if (loading) return <div>Loading experience...</div>;
+  if (loading) return (<LoadingScreen/>)
   if (error) return <div>Error: {error}</div>;
   if (!experience) return <div>Experience not found</div>;
   

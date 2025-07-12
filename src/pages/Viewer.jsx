@@ -9,6 +9,7 @@ import ViewerModel from './ViewerModel';
 import ViewerCameraSetup from './ViewerCameraSetup';
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 import { ArrowLeft, Eye, Edit2 } from 'lucide-react';
+import LoadingScreen from '../components/UI components/LoadingScreen';
 
 const Viewer = () => {
   const { experienceId } = useParams();
@@ -57,14 +58,7 @@ const Viewer = () => {
   }, [experienceId, loadSceneData]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0D0D0D] flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-zinc-400">Loading experience...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading experience..." />;
   }
 
   if (error) {
