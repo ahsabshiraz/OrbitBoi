@@ -18,6 +18,7 @@ export default function CreatorScene({ experience }) {
     hdrHeight,
     hdrScale,
     hdrType,
+    selectedCustomHdr,
   } = useCreatorStore();
   //  console.log('CurrentExperience', experience)
   return (
@@ -41,7 +42,8 @@ export default function CreatorScene({ experience }) {
       </Suspense>
         {env && (
           <Environment
-            preset={hdrType}
+            preset={selectedCustomHdr ? undefined : hdrType}
+            files={selectedCustomHdr ? selectedCustomHdr.cloudinaryUrl : undefined}
             background
             ground={{
               radius: hdrRadius,

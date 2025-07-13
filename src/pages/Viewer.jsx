@@ -10,6 +10,7 @@ import ViewerCameraSetup from './ViewerCameraSetup';
 import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 import { ArrowLeft, Eye, Edit2 } from 'lucide-react';
 import LoadingScreen from '../components/UI components/LoadingScreen';
+import LoadingScreen3D from '../components/UI components/LoadingScreen3D';
 
 const Viewer = () => {
   const { experienceId } = useParams();
@@ -27,6 +28,7 @@ const Viewer = () => {
     hdrHeight,
     hdrScale,
     hdrType,
+    selectedCustomHdr,
   } = useCreatorStore();
 
   useEffect(() => {
@@ -136,7 +138,7 @@ const Viewer = () => {
         >
           <ViewerCameraSetup />
           <BackGround />
-          <Suspense fallback={null}>
+          <Suspense fallback={<LoadingScreen3D/>}>
             {experience.models && experience.models.map((model) => (
               <ViewerModel
                 url={model.cloudinaryUrl}
@@ -144,15 +146,16 @@ const Viewer = () => {
                 key={model._id || model.cloudinaryUrl}
               />
             ))}
-            {env && <Environment
-              preset={hdrType}
+            <Environment
+              preset={selectedCustomHdr ? undefined : hdrType}
+              files={selectedCustomHdr ? selectedCustomHdr.cloudinaryUrl : undefined}
               background
               ground={{
                 radius: hdrRadius,
                 height: hdrHeight,
                 scale: hdrScale,
               }}
-            />}
+            />
           </Suspense>
         </Canvas>
       </div>

@@ -53,6 +53,8 @@ const CreatorSlice = (set, get) => ({
                         hdrHeight: state.hdrHeight,
                         hdrScale: state.hdrScale,
                         hdrType: state.hdrType || 'forest',
+                        hrdUrl: state.customHdrs || [],
+                        selected: state.selectedCustomHdr?._id || null, // <-- add this line
                     },
                 },
                 
@@ -105,6 +107,7 @@ const CreatorSlice = (set, get) => ({
         try {
             const token = localStorage.getItem('token');
             const response = await fetch(`${API_BASE_URL}/api/experiences/${experienceId}/scene`, {
+                method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -146,6 +149,7 @@ const CreatorSlice = (set, get) => ({
                         hdrHeight: sceneData.environment?.hdr?.hdrHeight ?? 10,
                         hdrScale: sceneData.environment?.hdr?.hdrScale ?? 150,
                         hdrType: sceneData.environment?.hdr?.hdrType ?? 'forest',
+                        hrdUrl: sceneData.environment?.hdr?.hrdUrl ?? []
                     },
                 },
                 ground: {
@@ -181,6 +185,9 @@ const CreatorSlice = (set, get) => ({
                 hdrScale: safeSceneData.environment.hdr.hdrScale,
                 hdrType: safeSceneData.environment.hdr.hdrType,
                 
+                // Custom HDRs
+                customHdrs: sceneData.environment?.hdr?.hrdUrl || [],
+                selectedCustomHdr: sceneData.environment?.hdr?.selected ? sceneData.environment.hdr.hrdUrl.find(hdr => hdr._id === sceneData.environment.hdr.selected) : null,
                 // Fog settings
                 fogEnabled: safeSceneData.fog.enabled,
                 fogMin: safeSceneData.fog.min,

@@ -3,6 +3,9 @@ import useCreatorStore from '../store/CreatorStore/useCreatorStore';
 import {
   FiImage, FiSun, FiRotateCw, FiBox, FiSettings, FiX, FiEye, FiMove, FiCamera
 } from 'react-icons/fi';
+import EnvironmentPanel from '../components/UI components/EnvironmentPanel';
+import PremiumToggle from '../components/UI components/PremiumToggle';
+import Slider from '../components/UI components/Slider';
 
 const TABS = [
   { key: 'bg', icon: FiImage, color: 'from-purple-500 to-pink-500' },
@@ -17,7 +20,7 @@ const LeftPanel = () => {
   const [showPanel, setShowPanel] = useState(false);
   const store = useCreatorStore();
   
-  console.log("hieght ,sacale , radius ", store.hdrHeight, store.hdrScale,  store.hdrRadius)
+  
 
 
   const currentModel = useMemo(() => {
@@ -111,7 +114,7 @@ const LeftPanel = () => {
                 {activeTab === 'orbit' && <OrbitControls store={store} />}
                 {activeTab === 'camera' && <CameraControls store={store} />}
                 {activeTab === 'model' && <ModelControls store={store} currentModel={currentModel} />}
-                {activeTab === 'env' && <EnvironmentControls store={store} />}
+                {activeTab === 'env' && <EnvironmentPanel store={store} />}
               </div>
             </div>
           </div>
@@ -383,92 +386,11 @@ const ModelControls = ({ store, currentModel }) => (
   </div>
 );
 
-const EnvironmentControls = ({ store }) => (
-  <div className="bg-white/5 rounded-lg p-4">
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        <FiSun className="w-5 h-5 text-orange-400" />
-        <span className="text-sm text-zinc-200 font-medium">Environment</span>
-      </div>
-      <PremiumToggle checked={store.env} onChange={() => { store.setEnv(); store.setGround(); }} />
-    </div>
-    {/* Add Environment Ground Controls */}
-    <div className="mt-4 space-y-2">
-      <span className="text-xs text-zinc-400 font-medium">Ground (Environment)</span>
-      <div>
-        <span className="text-xs text-zinc-400">HDR Type</span>
-        <select
-          value={store.hdrType}
-          onChange={e => store.setHdrType(e.target.value)}
-          className="w-full bg-black/50 text-white text-xs px-2 py-1 rounded border border-white/10 focus:border-blue-500 focus:outline-none mb-2"
-        >
-          <option value="apartment">apartment</option>
-          <option value="city">city</option>
-          <option value="dawn">dawn</option>
-          <option value="forest">forest</option>
-          <option value="lobby">lobby</option>
-          <option value="night">night</option>
-          <option value="park">park</option>
-          <option value="studio">studio</option>
-          <option value="sunset">sunset</option>
-          <option value="warehouse">warehouse</option>
-        </select>
-      </div>
-      <div>
-        <span className="text-xs text-zinc-400">Radius</span>
-        <Slider
-          value={store.hdrRadius}
-          onChange={store.setHdrRadius}
-          min={1}
-          max={1000}
-          step={1}
-          color="blue"
-        />
-      </div>
-      <div>
-        <span className="text-xs text-zinc-400">Height</span>
-        <Slider
-          value={store.hdrHeight}
-          onChange={store.setHdrHeight}
-          min={30}
-          max={100}
-          step={1}
-          color="blue"
-        />
-      </div>
-      <div>
-        <span className="text-xs text-zinc-400">Scale</span>
-        <Slider
-          value={store.hdrScale}
-          onChange={store.setHdrScale}
-          min={150}
-          max={890}
-          step={1}
-          color="blue"
-        />
-      </div>
-    </div>
-  </div>
-);
+
 
 // --- Utility Components (Slider, NumberInput, ControlCard, PremiumToggle) ---
 
-const Slider = ({ value, onChange, min, max, step, color = 'blue' }) => (
-  <div className="relative">
-    <input
-      type="range"
-      min={min}
-      max={max}
-      step={step}
-      value={value}
-      onChange={e => onChange(parseFloat(e.target.value))}
-      className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer slider"
-      style={{
-        background: `linear-gradient(to right, rgb(59 130 246) 0%, rgb(59 130 246) ${((value - min) / (max - min)) * 100}%, rgb(63 63 70) ${((value - min) / (max - min)) * 100}%, rgb(63 63 70) 100%)`
-      }}
-    />
-  </div>
-);
+
 
 const NumberInput = ({ label, value, onChange, compact = false, ...props }) => (
   <div className={compact ? '' : 'mb-2'}>
@@ -502,17 +424,6 @@ const ControlCard = ({ label, icon: Icon, checked, onChange }) => (
   </div>
 );
 
-const PremiumToggle = ({ checked, onChange }) => (
-  <button
-    onClick={onChange}
-    className={`relative w-9 h-5 rounded-full transition-all duration-300 focus:outline-none
-      ${checked 
-        ? 'bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg shadow-blue-500/25' 
-        : 'bg-zinc-600'}`}
-  >
-    <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow-lg transform transition-transform duration-300
-      ${checked ? 'translate-x-4' : 'translate-x-0'}`} />
-  </button>
-);
+
 
 export default LeftPanel;
