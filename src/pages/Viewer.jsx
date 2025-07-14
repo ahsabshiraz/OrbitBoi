@@ -146,6 +146,7 @@ const Viewer = () => {
                 key={model._id || model.cloudinaryUrl}
               />
             ))}
+            {env && (
             <Environment
               preset={selectedCustomHdr ? undefined : hdrType}
               files={selectedCustomHdr ? selectedCustomHdr.cloudinaryUrl : undefined}
@@ -154,8 +155,8 @@ const Viewer = () => {
                 radius: hdrRadius,
                 height: hdrHeight,
                 scale: hdrScale,
-              }}
-            />
+              }}/>  
+            )}
           </Suspense>
         </Canvas>
       </div>
